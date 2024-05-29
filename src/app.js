@@ -24,4 +24,14 @@ app.use(express.static("public"))
 //for cookie managment and crud operation on cookie 
 app.use(cookieParser())
 
+
+
+
+//routes import
+
+import userRouter from './routes/user.router.js'
+
+//routes import
+app.use("/users", userRouter)
+
 export {app}
