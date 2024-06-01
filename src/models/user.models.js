@@ -36,7 +36,7 @@ const userSchema = new Schema({
     },
     coverImage:{
         type:String,
-        required:true,
+       
 
     },
     password:{
@@ -56,7 +56,7 @@ userSchema.pre("save", async function (next){
         next();
         
     }else{
-        this.password = bcrypt.hash(this.password, 10)
+        this.password = await bcrypt.hash(this.password, 10)
         next()
     }
 })

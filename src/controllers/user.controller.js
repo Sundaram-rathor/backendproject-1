@@ -7,14 +7,22 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 
 const registerUser = asyncHandler( async(req,res)=>{
-  
+   //get user details from frontend 
+   // validation - not empty
+   //check if user already exists
+   // check for images, check for avatar
+   // upload them to local server than cloudinary
+   // create user object - create entry indb 
+   // remove password and refresh token field from response
+   // check if user is created
+   // return res
     
 
 
-    const {userName, email,password} = req.body
+    const {fullName,userName, email,password} = req.body   //getting details from user
 
     console.log(`username: ${userName}`)
-//validating that all fields have some value
+//validating that all fields have some value 
     if(
         [userName,email,password].some((field)=> field?.trim()==="")
     ){
@@ -23,30 +31,28 @@ const registerUser = asyncHandler( async(req,res)=>{
 
 // check if user already exist
    
-   const existedUser= User.findOne({
+   const existedUser = await User.findOne({
         $or:[{userName},{email}]
     })
    
 
     if(existedUser){
-        throw new ApiError(409,"user with email or username already exists")
+        throw new ApiError(409,`user with email or username already exists `)
     }
 
-
+// getting local path for uploaded files
     const avatarlocalpath = req.files?.avatar[0]?.path;
     const coverImagelocalpath = req.files?.coverImage[0]?.path
     
     if(!avatarlocalpath){
-       throw new ApiError(400, "avatar is required")
+       throw new ApiError(400, "avatar is  required")
     }
-    
+// uploading files to cloudinary
     const avatar = await uploadOnCloudinary(avatarlocalpath)
     const coverImage = await uploadOnCloudinary(coverImagelocalpath)
 
-    if (!avatar) {
-        throw new ApiError(400, "avatar is required")
-    }
-
+   
+//creating user data in data base
     const userToDataBase = await User.create({
         fullName,
         avatar:avatar.url,
