@@ -63,7 +63,10 @@ userSchema.pre("save", async function (next){
 //designing custom methods to check authenticity of user
 
 userSchema.methods.isPasswordCorrect = async function(password){
-  return await bcrypt.compare(password, this.password)
+    const validity = await bcrypt.compare(password, this.password)
+    console.log(validity)
+  return validity
+
 }
 
 userSchema.methods.generateAccessToken = function(){

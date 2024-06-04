@@ -18,8 +18,7 @@ app.use(express.urlencoded({extended:true,limit:"16kb"}))
 
 
 //for storing static files on server in folder name public
-app.use(express.static("public"))
-
+app.use(express.static("public")) 
 
 //for cookie managment and crud operation on cookie 
 app.use(cookieParser())
